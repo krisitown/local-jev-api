@@ -13,6 +13,9 @@ parser.add_argument('--image', default='ghcr.io/krisitown/local-jev-api:spark-20
 args = parser.parse_args()
 pins = json.loads((ROOT / 'references/runtime-recipes/model-pins.json').read_text())
 pin = pins[args.key]
+download = pin.get('recommended_download_alias', pin)
+if download is not pin and download['resolved_sha'] != pin['revision']:
+    raise ValueError(f"Download alias for {args.key} does not resolve to its pinned revision")
 destination = ROOT / 'checkpoints' / args.key
 destination.mkdir(parents=True, exist_ok=True)
 code = '''import sys
@@ -25,7 +28,7 @@ command = ['docker', 'run', '--rm', '--name', f'local-jev-bench-download-{args.k
            '-e', 'HF_HUB_OFFLINE=0', '-e', 'TRANSFORMERS_OFFLINE=0',
            '-e', 'HF_HUB_DISABLE_TELEMETRY=1',
            '-v', f'{destination}:/checkpoint', args.image,
-           '-c', code, pin['repo'], pin['revision']]
-print(json.dumps({'key': args.key, 'repo': pin['repo'], 'revision': pin['revision'],
-                  'destination': str(destination), 'command': command}), flush=True)
+           '-c', code, download['repo'], pin['revision']]
+print(json.dumps({'key': args.key, 'repo': pin['repo'], 'download_repo': download['repo'],
+                  'revision': pin['revision'], 'destination': str(destination)}), flush=True)
 subprocess.run(command, check=True)

@@ -2,7 +2,7 @@
 
 Run native decision checkpoints behind a local `/v1/systemone` endpoint. This repository provides the recipe used in our DGX Spark experiments, prebuilt Linux ARM64 container images, and a comparison of ten checkpoints.
 
-The main walkthrough uses **Cloudflare Clef Flash**. It accepts a text state, questions and explicit answer choices. This is a native decision-head API, not a vLLM chat server. Model weights are downloaded separately and are not included in the image.
+The default walkthrough uses **Cloudflare Clef Flash**; `./run.sh <model_key>` launches any of the ten tested checkpoints. Each accepts a text state, questions and explicit answer choices. This is a native decision-head API, not a vLLM chat server. Model weights are downloaded separately and are not included in the image.
 
 ## Prebuilt images
 
@@ -12,12 +12,12 @@ Package page: [local-jev-api on GitHub Container Registry](https://github.com/kr
 
 | Image | Purpose |
 |---|---|
-| `ghcr.io/krisitown/local-jev-api:spark-20261013` | Common tested runtime; Clef Flash tutorial |
+| `ghcr.io/krisitown/local-jev-api:spark-20261013` | Common tested runtime for nine checkpoints |
 | `ghcr.io/krisitown/local-jev-api:spark-omni-20261013` | Clef Omni compatibility runtime, Transformers 5.10.2 and CPU-first loading |
 
 These images target **Linux ARM64 / NVIDIA DGX Spark**. They are not general-purpose x86 or Mac GPU images. They contain NVIDIA's CUDA-enabled PyTorch runtime and are approximately 20 GB unpacked, with substantial shared layers. See [image provenance](image-provenance.json) for the original benchmark and published image identities. Registry manifest digests are recorded separately from Docker image IDs.
 
-Prerequisites: a working NVIDIA driver, Docker configured for GPU access, Python 3, curl, Git, and enough free disk and unified RAM. Flash weights occupy about 18 GiB. In our workload its approximate peak host available-memory drop was 36 GiB, greater than its 17.75 GiB loaded CUDA tensor allocation; leave headroom. The launcher never stops other workloads for you.
+Prerequisites: a working NVIDIA driver, Docker configured for GPU access, Python 3, Git, access to the image, and enough free disk and unified RAM. Authenticate to GHCR before the first pull of a published image; the package is currently private, so anonymous pulls fail. A cached or locally built image is reused without pulling. Flash weights occupy about 18 GiB. In our workload its approximate peak host available-memory drop was 36 GiB, greater than its 17.75 GiB loaded CUDA tensor allocation; leave headroom. The launcher never stops other workloads for you.
 
 ## Quick start
 
@@ -26,7 +26,7 @@ Prerequisites: a working NVIDIA driver, Docker configured for GPU access, Python
 git clone https://github.com/krisitown/local-jev-api.git
 cd local-jev-api
 
-# Pull the runtime, download the pinned model, launch and check a real response.
+# After authenticating to GHCR, pull the runtime, download Flash, launch and check a real response.
 ./run.sh
 ```
 
@@ -42,9 +42,33 @@ Already have the checkpoint? Pass the complete snapshot directory at revision `8
 ./run.sh /absolute/path/to/clef-flash
 ```
 
-The image and model revision are pinned by default. An existing snapshot must match the documented revision; the environment variable alone does not verify its contents. The default downloader fetches that revision explicitly and reuses cached files. The launcher retains timestamped health/response logs under `logs/`, and preserves an unsuccessful container for diagnosis. It refuses to replace an existing container with the same name.
+Choose another model by its key. The optional directory must contain that model's complete pinned snapshot; paths are resolved from your current directory.
 
-The API binds to `127.0.0.1:18081`. Model loading took about 157 seconds in our benchmark. Initial image and model downloads take additional time. The automated launcher has been checked with simulated Docker/HTTP responses; its underlying runtime and inference path were exercised in the completed experiment. We did not stop an existing model service to rerun the full installer during publication.
+```sh
+./run.sh --list
+./run.sh laya-typed-decisions
+./run.sh clef-omni /absolute/path/to/clef-omni
+PORT=18082 ./run.sh jeff-2b
+```
+
+| Model key | Pinned checkpoint | Runtime |
+|---|---|---|
+| `clef-flash` | `Cloudflare/clef-flash` | Clef |
+| `clef` | `Cloudflare/clef` | Clef |
+| `clef-omni` | `Cloudflare/clef-omni` | Clef Omni image |
+| `pplx-decider-v1.1-27b` | `perplexity-ai/pplx-decider-v1.1-27b` | PPLX |
+| `neohorse-jev-4b` | `TokenRhythm/NeoHorse-Jev-4B` | NeoHorse |
+| `jeff-0.8b` | `jeff-legacy/Jeff-Qwen3.5-0.8B` | Jeff |
+| `jeff-2b` | `jeff-legacy/Jeff-Qwen3.5-2B` | Jeff |
+| `laya` | `convaiinnovations/laya` | Laya |
+| `laya-multilingual` | `convaiinnovations/laya-multilingual` | Laya |
+| `laya-typed-decisions` | `convaiinnovations/laya-typed-decisions` | Laya |
+
+The [checkpoint manifest](references/runtime-recipes/model-pins.json) records each immutable revision. The Laya variants download from their own repositories. Jeff downloads use the manifest's recommended alias at the same resolved commit. Clef Omni uses its separate published image and CPU-first loading recipe. Each model gets a distinct default container name; only one model can bind the default port at a time. Set `PORT` for another host port, and choose `CONTAINER_NAME` if you need a second container for the same model. `IMAGE` overrides the image for a local build.
+
+The image and model revision are pinned by default. An existing supplied snapshot must match the documented revision; file checks detect missing components but cannot prove the contents' origin. The default downloader fetches the pinned commit explicitly and reuses cached files. The launcher checks the model, revision and backend in the health response, then sends a typed decision request using the selected model ID. It retains timestamped health/response logs under `logs/`, preserves an unsuccessful container for diagnosis, and refuses to replace an existing container with the same name.
+
+The API binds to `127.0.0.1:18081`. Flash model loading took about 157 seconds in our benchmark; larger models can take much longer. Initial image and model downloads take additional time. The automated launcher has been checked with simulated Docker/HTTP responses; its underlying runtime and inference path were exercised in the completed experiment. We did not stop an existing model service to rerun the full installer during publication.
 
 ## Step by step
 
@@ -95,7 +119,7 @@ For Omni:
 docker build -f Dockerfile.omni -t local-jev-api:spark-omni-local .
 ```
 
-Omni uses its own checkpoint and `MODEL_ID=Cloudflare/clef-omni`; it is not a drop-in name change in the Flash launcher. The common runtime also contains Laya, Jeff, PPLX and NeoHorse loaders, but their snapshot layouts and native limits differ. See the [checkpoint manifest](references/runtime-recipes/model-pins.json) and [runtime backends](runtime/backends.py). This release's automated launcher supports **Clef Flash only**.
+The launcher selects this Omni image automatically for `./run.sh clef-omni`. The common image supports the other nine model keys through the [runtime backends](runtime/backends.py). Snapshot layouts and native context limits differ by model; see the [checkpoint manifest](references/runtime-recipes/model-pins.json) and [findings](benchmark/FINDINGS.md).
 
 `Dockerfile.publish` is a maintainer recipe: it adds repository labels and license notices to the already benchmarked images while preserving all original runtime layers. It is not the normal from-scratch build path.
 
