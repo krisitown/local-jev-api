@@ -1,0 +1,29 @@
+{
+  "upstream": "https://huggingface.co/TokenRhythm/NeoHorse-Jev-4B",
+  "revision": "434cb21d3a994a953d3ae5788405fcb2c4970554",
+  "wheel": "dist/neohorse_decision-1.0.0-py3-none-any.whl",
+  "wheel_sha256": "7401f1f3a041bd9c05662aaf38ad894e68e0103685a2fd3ed23169c3aff64bfc",
+  "license": "Apache-2.0 (wheel metadata and model card; upstream snapshot did not include a root LICENSE file)",
+  "license_text": "LICENSE-APACHE-2.0.txt",
+  "copied_files": {
+    "neohorse_decision/__init__.py": "257213078c9c179fbde33ea8defd63174cd36207bb72a725ea7845b581c30cba",
+    "neohorse_decision/_inference.py": "d8283d38f51f2cd88017039dc944d3d44a60e56e871090e077cd23d7e1c11804",
+    "neohorse_decision/cli.py": "a3daeb60ce7211e067737fd7345e7b2d20a04403a0424d310a9c38eb0096b1cc",
+    "neohorse_decision/engine.py": "3b6b3f36f830c654ffa161ef222a39b9e766039cfa6d7612add9a4c70fb88b76",
+    "neohorse_decision/image_input.py": "69c64508c024b1217f732c078e74ca7d838e95614d428359698a2f053fddfd41",
+    "neohorse_decision/server.py": "bd49282fd749d4550bf83190abdda9fdeb906a86ae2addc9da2c758d92a91286",
+    "neohorse_decision/systemone.py": "bce2de084b017bb2e5615ea27ffc226e1373cc6410df553a556b88c200c7633c",
+    "neohorse_decision/vision.py": "3777920631dd0a62d79a4428c06089a898676e45b9468f2dbf430cf109f8e506",
+    "neohorse_decision/_vendor/LICENSE": "f93060bd0f1875daaee413754eeb3a4757205bdb9e4e7a36b4efc379a027d43f",
+    "neohorse_decision/_vendor/NOTICE.md": "9bdb2a943d547c457a5614c5ab138b19753798e59f94ed92f3d1c07384510703",
+    "neohorse_decision/_vendor/__init__.py": "7b86e4fe30867d00f45c09e3a9930e7406838c934abd338fb027126aa0eb1f89",
+    "neohorse_decision/_vendor/model.py": "cff5be248612012ae49d7e3fd4c75c220c94d5432114a661175a68cf3237cdc1",
+    "neohorse_decision/_vendor/schema.py": "e78ee8f180660e2ddb057b208b581f9e1cdca024ea50d87c631286c187691370",
+    "neohorse_decision-1.0.0.dist-info/METADATA": "e10137cce89f809f972ff3c91b2b25c9e47764c8f6f1821960bc4cc0f6690f90",
+    "neohorse_decision-1.0.0.dist-info/WHEEL": "61532836a2b3111b7ec23519c09df7c41180c27165fb872a6d8913b566b88ad1",
+    "neohorse_decision-1.0.0.dist-info/entry_points.txt": "2d7d9aa9461d83ccc138a785f0eae53a3b76e3eaec79eee6b7d51eb4861a4b4e",
+    "neohorse_decision-1.0.0.dist-info/top_level.txt": "91729b8420aff7ac1f341d99d07e2f43e9ff6ba97144798a63bf02c059f64770",
+    "neohorse_decision-1.0.0.dist-info/RECORD": "7917b4555f699c9b64ccc297001e98303b9a6f7cba72681209b7cecffd25d457"
+  },
+  "note": "The release wheel is unpacked for local import; never installed or executed during preparation."
+}

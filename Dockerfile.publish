@@ -1,0 +1,9 @@
+# Metadata/notice layer over an already benchmarked immutable local image.
+ARG SOURCE_IMAGE
+FROM ${SOURCE_IMAGE}
+ARG ORIGINAL_IMAGE_ID
+LABEL org.opencontainers.image.source="https://github.com/krisitown/local-jev-api"
+LABEL org.opencontainers.image.description="Native local decision APIs for NVIDIA DGX Spark (ARM64); model weights downloaded separately."
+LABEL io.krisitown.local-jev.original-image=${ORIGINAL_IMAGE_ID}
+COPY NOTICE.md /app/NOTICE.md
+COPY licenses/ /app/licenses/

@@ -1,0 +1,2 @@
+[console_scripts]
+neohorse-decision = neohorse_decision.cli:main

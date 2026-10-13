@@ -1,0 +1,16 @@
+{
+  "state": "Policy: automatic retry is allowed for idempotent operations and prohibited for non-idempotent operations. GET /status is idempotent; POST /charge is not.",
+  "questions": {
+    "q1": {
+      "type": "choice",
+      "instructions": "Which operation may the handler retry after a timeout?",
+      "criteria": {
+        "A": "GET /status",
+        "B": "POST /charge",
+        "C": "Both",
+        "D": "Neither"
+      }
+    }
+  },
+  "model": "Cloudflare/clef-flash"
+}

@@ -1,0 +1,13 @@
+{
+  "upstream": "https://github.com/firelex/jeff",
+  "tag": "v1.2",
+  "commit": "bb9ae3b3ef18c3cf128bbc056cc2d0b388e5d115",
+  "copied_files": {
+    "src/jeff/__init__.py": "bd335b8f32ab6ff955d0f55880cbea501246f3e7d152de3ff03354d2ac052ed3",
+    "src/jeff/client.py": "e13cda1151883bc0e2560097e911c349be41f6495c500286d92043aeac0ab947",
+    "src/jeff/model.py": "389dbf428cfd3eb8232198953a70e81ff423f3d3bd2292fa9c1496ac42f6fbd1",
+    "src/jeff/types.py": "085d188898f939c581f6eeec2ebf1ab31df64f0aadef2e108cc70f2f42ecb929",
+    "LICENSE": "ab061adada2c603bdd6d7773bd89a0c48af32f9ddb3c5a12086b6f5c7c364bdb"
+  },
+  "note": "Only serving/import-required package files and MIT license are included; no training code."
+}
