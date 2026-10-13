@@ -4,13 +4,15 @@
     "published": "sha256:5a8368f129b2ba2323016d5712e123bb0271c0d7eda0276264e2adafec69c20d",
     "tag": "ghcr.io/krisitown/local-jev-api:spark-20261013",
     "original_layers_preserved": true,
-    "runtime_configuration_unchanged": true
+    "runtime_configuration_unchanged": true,
+    "registry_manifest_digest": "sha256:b4a417bb7585405cd03688849328ee2b8d316f5f083fca0032ad24be2a04b1ea"
   },
   {
     "original": "sha256:b66b426ab74e8bc02c306fed13d20faae6200361bc1efc7470ff737ca1c05eea",
     "published": "sha256:aa14862fdc5fc3e361ac8f57f6214439381882fbda7e9a4d4d7e1c92d7832da7",
     "tag": "ghcr.io/krisitown/local-jev-api:spark-omni-20261013",
     "original_layers_preserved": true,
-    "runtime_configuration_unchanged": true
+    "runtime_configuration_unchanged": true,
+    "registry_manifest_digest": "sha256:a6c575dc9f2f9ed02e794df33bd97f129c16f8e019fc00e9d7608db8656bcf72"
   }
 ]

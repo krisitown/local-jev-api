@@ -6,6 +6,8 @@ The main walkthrough uses **Cloudflare Clef Flash**. It accepts a text state, qu
 
 ## Prebuilt images
 
+**Publication status:** both images are uploaded and authenticated pulls are verified. The package is currently private; changing package visibility to Public is the remaining step for anonymous installation.
+
 Package page: [local-jev-api on GitHub Container Registry](https://github.com/krisitown/local-jev-api/pkgs/container/local-jev-api).
 
 | Image | Purpose |
